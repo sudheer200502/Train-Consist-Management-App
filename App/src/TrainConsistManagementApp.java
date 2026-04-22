@@ -1,15 +1,5 @@
-import java.util.ArrayList;
-import java.util.List;
-
-class Bogie {
-    String name;
-    int capacity;
-
-    Bogie(String name, int capacity) {
-        this.name = name;
-        this.capacity = capacity;
-    }
-}
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TrainConsistManagementApp {
 
@@ -17,16 +7,25 @@ public class TrainConsistManagementApp {
 
         System.out.println("=== Train Consist Management App ===");
 
-        List<Bogie> bogies = new ArrayList<>();
+        String trainId = "TRN-1234";
+        String cargoCode = "PET-AB";
 
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
-        bogies.add(new Bogie("First Class", 24));
+        Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
+        Pattern cargoPattern = Pattern.compile("PET-[A-Z]{2}");
 
-        int totalCapacity = bogies.stream()
-                .map(b -> b.capacity)
-                .reduce(0, Integer::sum);
+        Matcher trainMatcher = trainPattern.matcher(trainId);
+        Matcher cargoMatcher = cargoPattern.matcher(cargoCode);
 
-        System.out.println("Total Seating Capacity: " + totalCapacity);
+        if (trainMatcher.matches()) {
+            System.out.println("Train ID is valid");
+        } else {
+            System.out.println("Train ID is invalid");
+        }
+
+        if (cargoMatcher.matches()) {
+            System.out.println("Cargo Code is valid");
+        } else {
+            System.out.println("Cargo Code is invalid");
+        }
     }
 }
