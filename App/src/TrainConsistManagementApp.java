@@ -1,31 +1,20 @@
-class CargoSafetyException extends RuntimeException {
-    CargoSafetyException(String message) {
+class InvalidCapacityException extends Exception {
+    InvalidCapacityException(String message) {
         super(message);
     }
 }
 
-class GoodsBogie {
-    String shape;
-    String cargo;
+class PassengerBogie {
+    String type;
+    int capacity;
 
-    GoodsBogie(String shape) {
-        this.shape = shape;
-    }
-
-    void assignCargo(String cargo) {
-        try {
-            if (this.shape.equals("Rectangular") && cargo.equals("Petroleum")) {
-                throw new CargoSafetyException("Unsafe Cargo Assignment: Petroleum not allowed in Rectangular bogie");
-            }
-
-            this.cargo = cargo;
-            System.out.println("Cargo assigned successfully: " + cargo + " to " + shape + " bogie");
-
-        } catch (CargoSafetyException e) {
-            System.out.println("ERROR: " + e.getMessage());
-        } finally {
-            System.out.println("Cargo assignment process completed for " + shape + " bogie");
+    PassengerBogie(String type, int capacity) throws InvalidCapacityException {
+        if (capacity <= 0) {
+            throw new InvalidCapacityException("Capacity must be greater than zero");
         }
+        this.type = type;
+        this.capacity = capacity;
+        System.out.println("Bogie created: " + type + " with capacity " + capacity);
     }
 }
 
@@ -35,12 +24,25 @@ public class TrainConsistManagementApp {
 
         System.out.println("=== Train Consist Management App ===");
 
-        GoodsBogie b1 = new GoodsBogie("Rectangular");
-        GoodsBogie b2 = new GoodsBogie("Cylindrical");
+        try {
+            PassengerBogie b1 = new PassengerBogie("Sleeper", 72);
+            PassengerBogie b2 = new PassengerBogie("AC Chair", -10);
+        } catch (InvalidCapacityException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
 
-        b1.assignCargo("Petroleum");
-        b2.assignCargo("Petroleum");
+        try {
+            PassengerBogie b3 = new PassengerBogie("First Class", 0);
+        } catch (InvalidCapacityException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
 
-        System.out.println("System continues running safely...");
+        try {
+            PassengerBogie b4 = new PassengerBogie("AC Chair", 56);
+        } catch (InvalidCapacityException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+
+        System.out.println("System continues safely...");
     }
 }
